@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 实例事件</title>
+<!--    <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>-->
+    <script type="text/javascript" th:src="@{/js/vue.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/axios.min.js}"></script>
+</head>
+<body>
+<h1>Vue 实例事件</h1>
+<hr>
+<div id="app">
+    <input type="text" placeholder="请输入关键词" v-model="keyword">
+    <p><button @click="search">搜索</button></p>
+    <p>{{goods}}</p>
+    <ul>
+        <li v-for="good in goods" >
+            <img :src="good.img" alt="">
+            <h1 v-html="good.name"></h1>
+            <h2>{{good.price}}</h2>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data:{
+            keyword: 'vue',
+            goods:[]
+        },
+        methods:{
+            search:function(){
+                let that =this;
+                axios.get('/search/'+this.keyword+'/1/5')
+                    .then(function (response) {
+                        that.goods=response.data;
+                    })
+                    .catch(function (error) {
+                        console.log("error");
+                    });
+
+            }
+        },
+    });
+</script>
